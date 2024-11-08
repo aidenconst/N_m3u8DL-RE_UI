@@ -1,0 +1,19 @@
+{
+  "auth": {
+    "codeLogin": "Code Login",
+    "forgetPassword": "Forget Password",
+    "login": "Login",
+    "qrcodeLogin": "Qr Code Login",
+    "register": "Register"
+  },
+  "dashboard": {
+    "analytics": "Analytics",
+    "title": "Dashboard",
+    "workspace": "Download Completed",
+    "downerror": "Download Failed",
+    "adddown": "Add Download",
+    "alldown": "Download all tasks",
+    "downset": "Download Configuration",
+    "about": "About"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "antd": "Downloading",
+  "title": "Download Management",
+  "vben": {
+    "about": "About",
+    "antdv": "Ant Design Vue Version",
+    "document": "Document",
+    "element-plus": "Element Plus Version",
+    "naive-ui": "Naive UI Version",
+    "title": "Project"
+  }
+}
