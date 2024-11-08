@@ -12,7 +12,7 @@ const routes: RouteRecordRaw[] = [
       order: 1000,
       title: $t('demos.title'),
     },
-    name: 'Demos',
+    name: 'download',
     path: '/welcome',
     children: [
       {
@@ -31,13 +31,13 @@ const routes: RouteRecordRaw[] = [
           activeIcon: 'line-md:downloading-loop',
           title: $t('demos.antd'),
         },
-        name: 'Hello',
-        path: '/welcome',
+        name: 'downLoading',
+        path: '/downloading',
         component: () => import('#/views/down/download.vue'),
       },
       {
-        name: 'downloaddone',
-        path: '/downloadDone',
+        name: 'downloadDone',
+        path: '/downloaddone',
         component: () => import('#/views/down/downdone.vue'),
         meta: {
           icon: 'line-md:confirm-circle',
@@ -46,8 +46,8 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        name: 'downloadfailed',
-        path: '/DownloadFailed',
+        name: 'DownloadFailed',
+        path: '/downloadfailed',
         component: () => import('#/views/down/downfail.vue'),
         meta: {
           icon: 'line-md:download-off-outline',
@@ -57,7 +57,7 @@ const routes: RouteRecordRaw[] = [
       },
       {
         name: 'setconfit',
-        path: '/SetConfit',
+        path: '/setconfit',
         component: () => import('#/views/down/config.vue'),
         meta: {
           icon: 'line-md:cog',
@@ -66,8 +66,8 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        name: 'about',
-        path: '/aboutMe',
+        name: 'hello',
+        path: '/hello',
         component: () => import('#/views/down/about.vue'),
         meta: {
           icon: 'line-md:alert-circle',
