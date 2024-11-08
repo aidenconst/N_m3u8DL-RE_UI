@@ -27,7 +27,9 @@ const iconStyle = ref([
 
 function toggleTheme() {
   webSocketStore.setlinktype(); // 重置ws连接状态
-  console.log('ws状态：', webSocketStore.getlinktype);
+  setTimeout(() => {
+    console.log('ws状态：', webSocketStore.getlinktype);
+  }, 1000);
 }
 </script>
 

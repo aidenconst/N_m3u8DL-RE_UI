@@ -10,18 +10,12 @@ import { defineStore } from 'pinia';
 const { apiURL } = useAppConfig(import.meta.env, import.meta.env.PROD);
 export const useWebSocketStore = defineStore({
   actions: {
-    /** 清除心跳定时器 */
-    clearCheckTask() {
-      // console.log('销毁心跳');
-      this.autoLink = false; // 关闭自动重连
-      this.checkTask && clearInterval(this.checkTask);
-    },
+    /** 主动关闭连接并清除心跳定时器 */
     closeWebSocket() {
-      if (this.socket) {
-        this.clearCheckTask();
-        this.socket.close();
-        this.linktype = false;
-      }
+      this.socket.close();
+      this.autoLink = false; // 关闭自动重连
+      this.linktype = false;
+      this.checkTask && clearInterval(this.checkTask);
     },
     connectWebSocket(url: string = this.linkurl) {
       const accessStore = useAccessStore();
@@ -40,6 +34,7 @@ export const useWebSocketStore = defineStore({
       );
       this.socket.addEventListener('open', (event) => {
         this.linktype = true;
+        this.autoLink = true; // 关闭自动重连
         this.linkurl = url;
         this.setCheckTask();
         // const data = JSON.parse(event.data);
@@ -77,7 +72,7 @@ export const useWebSocketStore = defineStore({
           message: 'ws服务',
         });
         // 清除心跳计时器
-        this.clearCheckTask();
+        this.closeWebSocket();
         // 断线重连
         setTimeout(() => {
           if (this.autoLink) {
@@ -93,15 +88,16 @@ export const useWebSocketStore = defineStore({
       });
     },
     sendMessage(message: string) {
-      if (this.socket) {
+      if (this.linktype) {
         this.socket.send(message);
       }
     },
     setCheckTask() {
       setTimeout(() => {
-        console.log('延时3s开启心跳');
-        if (this.socket) {
+        // console.log('延时3s开启心跳');
+        if (this.linktype) {
           this.checkTask = setInterval(() => {
+            // console.log(`心跳中...${new Date()}`);
             this.socket.send(JSON.stringify(this.heartbeatMessage));
           }, this.pingTime);
         }
@@ -109,14 +105,13 @@ export const useWebSocketStore = defineStore({
     },
     /** 设置ws连接状态 */
     setlinktype() {
-      if (this.socket) {
+      if (this.linktype) {
+        // console.log(`关闭连接:`, this.socket);
         this.socket.close();
-        this.clearCheckTask();
-        this.linktype = !this.linktype;
+        this.closeWebSocket();
       } else {
-        if (this.socket) {
-          this.connectWebSocket();
-        }
+        // console.log(`重新连接:`, this.socket);
+        this.connectWebSocket();
       }
     },
     setWsUrl(url: string) {
