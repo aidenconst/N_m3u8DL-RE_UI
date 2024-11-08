@@ -31,8 +31,8 @@ const defaultPreferences: Preferences = {
     styleType: 'normal',
   },
   copyright: {
-    companyName: 'Vben',
-    companySiteLink: 'https://www.vben.pro',
+    companyName: 'aidenconsole',
+    companySiteLink: 'https://github.com/aidenconst',
     date: '2024',
     enable: true,
     icp: '',

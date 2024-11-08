@@ -4,7 +4,12 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { DEFAULT_HOME_PATH, LOGIN_PATH } from '@vben/constants';
-import { resetAllStores, useAccessStore, useUserStore } from '@vben/stores';
+import {
+  resetAllStores,
+  useAccessStore,
+  useUserStore,
+  useWebSocketStore,
+} from '@vben/stores';
 
 import { notification } from 'ant-design-vue';
 import { defineStore } from 'pinia';
@@ -16,7 +21,7 @@ export const useAuthStore = defineStore('auth', () => {
   const accessStore = useAccessStore();
   const userStore = useUserStore();
   const router = useRouter();
-
+  const webSocketStore = useWebSocketStore();
   const loginLoading = ref(false);
 
   /**
@@ -58,6 +63,7 @@ export const useAuthStore = defineStore('auth', () => {
         }
 
         if (userInfo?.realName) {
+          webSocketStore.connectWebSocket(); // 连接ws
           notification.success({
             description: `${$t('authentication.loginSuccessDesc')}:${userInfo?.realName}`,
             duration: 3,
@@ -80,6 +86,8 @@ export const useAuthStore = defineStore('auth', () => {
     } catch {
       // 不做任何处理
     }
+    webSocketStore.closeWebSocket(); // 断开ws连接, 清除定时器
+
     resetAllStores();
     accessStore.setLoginExpired(false);
 

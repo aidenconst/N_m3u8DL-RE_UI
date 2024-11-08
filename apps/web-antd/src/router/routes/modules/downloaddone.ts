@@ -17,7 +17,7 @@ const routes: RouteRecordRaw[] = [
     path: '/downloaddone',
     children: [
       {
-        name: 'downloadDone',
+        name: '_downloadDone',
         path: '/downloaddone',
         component: () => import('#/views/down/downdone.vue'),
         meta: {

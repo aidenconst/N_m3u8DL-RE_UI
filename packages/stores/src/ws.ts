@@ -1,6 +1,6 @@
 import { useAccessStore } from '@vben/stores';
 
-import { message } from 'ant-design-vue';
+import { notification } from 'ant-design-vue';
 
 import { useAppConfig } from '../../effects/hooks/src';
 
@@ -12,7 +12,8 @@ export const useWebSocketStore = defineStore({
   actions: {
     /** 清除心跳定时器 */
     clearCheckTask() {
-      // console.log('销毁心跳定时器');
+      // console.log('销毁心跳');
+      this.autoLink = false; // 关闭自动重连
       this.checkTask && clearInterval(this.checkTask);
     },
     closeWebSocket() {
@@ -25,11 +26,12 @@ export const useWebSocketStore = defineStore({
     connectWebSocket(url: string = this.linkurl) {
       const accessStore = useAccessStore();
       if (!accessStore.accessToken) {
-        message.success({
-          content: () => '登录失效,请重新登录',
-          style: {
-            marginTop: '10vh',
-          },
+        // 已登出或未登录状态，断开ws连接定时器
+        this.closeWebSocket(); // 断开ws连接,清除定时器
+        notification.error({
+          description: '登录失效,请重新登录.',
+          duration: 2,
+          message: 'ws服务',
         });
         return;
       }
@@ -39,48 +41,54 @@ export const useWebSocketStore = defineStore({
       this.socket.addEventListener('open', (event) => {
         this.linktype = true;
         this.linkurl = url;
-        // console.log('WebSocket 已连接:', event);
         this.setCheckTask();
         // const data = JSON.parse(event.data);
         setTimeout(() => {
-          message.success({
-            content: () => 'WebSocket服务已连接',
-            style: {
-              marginTop: '10vh',
-            },
+          notification.success({
+            description: 'WebSocket服务已连接！',
+            duration: 2,
+            message: 'ws服务',
           });
-        }, 500);
+        }, 600);
       });
       this.socket.onerror = (error) => {
-        console.error('WebSocket 错误:', error);
+        this.autoLink = false; // 关闭自动重连
+        notification.success({
+          description: `错误信息：${JSON.stringify(error)}`,
+          duration: 2,
+          message: 'ws服务',
+        });
+        // console.error('WebSocket 错误:', error);
       };
       this.socket.onmessage = (event) => {
         if (event.data.code === 800) {
-          message('WebSocket连接成功!');
+          notification.success({
+            description: 'WebSocket连接成功!',
+            duration: 2,
+            message: 'ws服务',
+          });
         }
         // console.log('WebSocket 消息:', event.data);
       };
       this.socket.addEventListener('close', (event) => {
-        message.error({
-          content: () => 'WebSocket连接断开了',
+        notification.error({
+          description: 'WebSocket连接已断开!',
           duration: 2,
-          style: {
-            marginTop: '10vh',
-          },
+          message: 'ws服务',
         });
         // 清除心跳计时器
-        this.checkTask && clearInterval(this.checkTask);
+        this.clearCheckTask();
         // 断线重连
         setTimeout(() => {
-          this.connectWebSocket();
-          message.warning({
-            content: () => 'WebSocket重新连接中...',
-            duration: 2,
-            style: {
-              marginTop: '10vh',
-            },
-          });
-        }, 3000);
+          if (this.autoLink) {
+            this.connectWebSocket();
+            notification.warning({
+              description: 'WebSocket重新连接中...',
+              duration: 2,
+              message: 'ws服务',
+            });
+          }
+        }, 2000);
         // console.log('WebSocket 断开:', event);
       });
     },
@@ -90,14 +98,14 @@ export const useWebSocketStore = defineStore({
       }
     },
     setCheckTask() {
-      if (!this.checkTask && this.socket) {
-        // console.log('延时3s开启心跳');
-        setTimeout(() => {
+      setTimeout(() => {
+        console.log('延时3s开启心跳');
+        if (this.socket) {
           this.checkTask = setInterval(() => {
             this.socket.send(JSON.stringify(this.heartbeatMessage));
           }, this.pingTime);
-        }, 3000);
-      }
+        }
+      }, 3000);
     },
     /** 设置ws连接状态 */
     setlinktype() {
@@ -127,6 +135,7 @@ export const useWebSocketStore = defineStore({
   id: 'webSocket',
   state: () => ({
     accessToken: '',
+    autoLink: true as boolean, // 自动重新连接ws开启
     checkTask: null, // 心跳计时器
     heartbeatMessage: { msg: 'ping', type: 0 },
     linktype: false as boolean,

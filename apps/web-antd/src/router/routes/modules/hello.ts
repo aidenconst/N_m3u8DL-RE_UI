@@ -10,14 +10,14 @@ const routes: RouteRecordRaw[] = [
       icon: 'line-md:alert-circle',
       activeIcon: 'line-md:alert-circle-twotone',
       keepAlive: true,
-      order: 1008,
+      order: 1005,
       title: $t('page.dashboard.about'),
     },
     name: 'hello',
     path: '/hello',
     children: [
       {
-        name: 'hello',
+        name: '_hello',
         path: '/hello',
         component: () => import('#/views/down/about.vue'),
         meta: {

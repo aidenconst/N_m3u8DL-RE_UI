@@ -11,13 +11,13 @@ const routes: RouteRecordRaw[] = [
       activeIcon: 'line-md:download-off',
       title: $t('page.dashboard.downerror'),
       keepAlive: true,
-      order: 1007,
+      order: 1003,
     },
     name: 'DownloadFailed',
     path: '/downloadfailed',
     children: [
       {
-        name: 'DownloadFailed',
+        name: '_DownloadFailed',
         path: '/downloadfailed',
         component: () => import('#/views/down/downfail.vue'),
         meta: {

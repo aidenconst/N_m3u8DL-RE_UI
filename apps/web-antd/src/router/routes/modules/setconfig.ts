@@ -11,13 +11,13 @@ const routes: RouteRecordRaw[] = [
       activeIcon: 'line-md:cog-filled',
       title: $t('page.dashboard.downset'),
       keepAlive: true,
-      order: 1006,
+      order: 1004,
     },
     name: 'setConfit',
     path: '/setconfit',
     children: [
       {
-        name: 'setConfit',
+        name: '_setConfit',
         path: '/setconfit',
         component: () => import('#/views/down/config.vue'),
         meta: {

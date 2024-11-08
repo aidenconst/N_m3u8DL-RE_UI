@@ -9,10 +9,13 @@ defineOptions({
 });
 
 const webSocketStore = useWebSocketStore();
-if (!webSocketStore.getlinktype) {
-  console.log('框架页面连接ws');
-  webSocketStore.connectWebSocket();
-}
+setTimeout(() => {
+  if (!webSocketStore.getlinktype) {
+    // console.log('框架页面连接ws');
+    webSocketStore.connectWebSocket();
+  }
+}, 1000);
+
 const iconStyle = ref([
   {
     color: '#1a9d10',

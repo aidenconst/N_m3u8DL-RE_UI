@@ -23,7 +23,7 @@ const routes: RouteRecordRaw[] = [
           activeIcon: 'line-md:downloading-loop',
           title: $t('demos.antd'),
         },
-        name: 'downLoading',
+        name: '_downLoading',
         path: '/downloading',
         component: () => import('#/views/down/download.vue'),
       },

@@ -10,6 +10,10 @@ export const overridesPreferences = defineOverridesPreferences({
   // overrides
   app: {
     name: webTITLE,
+    // 是否开启检查更新
+    enableCheckUpdates: true,
+    // 检查更新的时间间隔，单位为分钟
+    checkUpdatesInterval: 1,
   },
   theme: {
     // 主题色

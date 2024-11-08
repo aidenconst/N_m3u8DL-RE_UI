@@ -23,7 +23,7 @@ const routes: RouteRecordRaw[] = [
           activeIcon: 'line-md:plus-circle-filled',
           title: $t('page.dashboard.adddown'),
         },
-        name: 'addDownLoad',
+        name: '_addDownLoad',
         path: '/adddownload',
         component: () => import('#/views/down/add.vue'),
       },
