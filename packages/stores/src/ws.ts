@@ -87,9 +87,9 @@ export const useWebSocketStore = defineStore({
         // console.log('WebSocket 断开:', event);
       });
     },
-    sendMessage(message: string) {
+    sendMessage(message: any) {
       if (this.linktype) {
-        this.socket.send(message);
+        this.socket.send(JSON.stringify(message));
       }
     },
     setCheckTask() {
@@ -98,7 +98,7 @@ export const useWebSocketStore = defineStore({
         if (this.linktype) {
           this.checkTask = setInterval(() => {
             // console.log(`心跳中...${new Date()}`);
-            this.socket.send(JSON.stringify(this.heartbeatMessage));
+            this.sendMessage(this.heartbeatMessage);
           }, this.pingTime);
         }
       }, 3000);
