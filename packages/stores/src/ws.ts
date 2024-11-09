@@ -12,7 +12,10 @@ export const useWebSocketStore = defineStore({
   actions: {
     /** 主动关闭连接并清除心跳定时器 */
     closeWebSocket() {
-      this.socket.close();
+      console.log(!!this.socket.onclose);
+      if (this.socket.onclose !== null) {
+        this.socket.close();
+      }
       this.autoLink = false; // 关闭自动重连
       this.linktype = false;
       this.checkTask && clearInterval(this.checkTask);
