@@ -58,16 +58,17 @@ function upData(list: listdataType[]) {
   }
 }
 const webSocketStore = useWebSocketStore();
-// if (!webSocketStore.getlinktype) {
-//   webSocketStore.connectWebSocket();
-// }
-webSocketStore.getws.onmessage = (event) => {
-  const list: listdataType[] = JSON.parse(event.data) as listdataType[];
-  if (list.code !== 800) {
-    upData(list);
-  }
-  // console.log('主键收到信息：', event.data);
-};
+// 加载组件再次检测是否连接ws，防止在download页面刷新时未连接ws监听信息报错
+if (webSocketStore.getlinktype) {
+  webSocketStore.getws.onmessage = (event) => {
+    const list: listdataType[] = JSON.parse(event.data) as listdataType[];
+    if (list.code !== 800) {
+      upData(list);
+    }
+  };
+} else {
+  webSocketStore.connectWebSocket();
+}
 
 // 页面加载完成
 onMounted(() => {
@@ -77,7 +78,7 @@ onMounted(() => {
 // 监听页面刷新
 onUnmounted(() => {
   // console.log('页面销毁即将刷新');
-  webSocketStore.clearCheckTask();
+  // webSocketStore.clearCheckTask();
   // 可以在这里执行保存数据的操作，如保存状态到localStorage或sessionStorage
 });
 </script>
