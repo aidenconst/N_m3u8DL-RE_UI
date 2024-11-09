@@ -5,6 +5,11 @@ type Result = {
   data?: Array<any>;
   message: string;
 };
+type addResult = {
+  code?: number;
+  data?: Array<any>;
+  msg: string;
+};
 type addType = {
   retrycount?: number | string;
   saveFilePath: string;
@@ -43,7 +48,7 @@ async function getDownFailApi() {
  * 新增下载任务
  */
 async function addDownApi(data?: addType) {
-  return requestClient.post<Result>('/download', data);
+  return requestClient.post<addResult>('/download', data);
 }
 /**
  * 获取全局配置
