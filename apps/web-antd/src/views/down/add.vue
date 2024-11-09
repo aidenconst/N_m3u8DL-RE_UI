@@ -152,13 +152,16 @@ const [Form, formApi] = useVbenForm({
 });
 
 async function onSubmit(values: Record<string, any>) {
-  const datas = JSON.stringify(values);
-  const { code, data, msg } = await addDownApi(values);
-  if (code === 0) {
+  // const datas = JSON.stringify(values);
+  const res = await addDownApi(values);
+  if (res) {
     message.success({
-      content: `${msg}`,
+      content: '已加入下载队列',
     });
-    console.log(data);
+  } else {
+    message.error({
+      content: `添加错误`,
+    });
   }
 }
 
@@ -166,6 +169,10 @@ async function loadData() {
   const data = (await getConfigApi()) as donedataType;
   formApi.setFieldValue('token', data.apiToken);
   formApi.setFieldValue('saveFilePaths', data.saveFile);
+  formApi.setFieldValue('threadCountss', data.threadCount);
+  formApi.setFieldValue('retrycounts', data.retrycount);
+  formApi.setFieldValue('setbinaryMeMrges', data.binaryMeMrge);
+  formApi.setFieldValue('setdecryptions', data.mp4RealTimeDecryption);
 }
 onMounted(() => {
   loadData();
