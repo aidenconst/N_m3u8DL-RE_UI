@@ -59,21 +59,31 @@ function upData(list: listdataType[]) {
 }
 const webSocketStore = useWebSocketStore();
 // 加载组件再次检测是否连接ws，防止在download页面刷新时未连接ws监听信息报错
-if (webSocketStore.getlinktype) {
-  webSocketStore.getws.onmessage = (event) => {
-    const list: listdataType[] = JSON.parse(event.data) as listdataType[];
-    if (list.code !== 800) {
-      upData(list);
-    }
-  };
-} else {
-  webSocketStore.connectWebSocket();
+/** 监听ws下载返回数据 */
+function Listening() {
+  if (webSocketStore.getlinktype) {
+    webSocketStore.getws.onmessage = (event) => {
+      const list: listdataType[] = JSON.parse(event.data) as listdataType[];
+      if (list.code !== 800) {
+        upData(list);
+      }
+    };
+  } else {
+    webSocketStore.connectWebSocket();
+    setTimeout(() => {
+      Listening();
+    }, 1000);
+  }
 }
 
 // 页面加载完成
 onMounted(() => {
+  // console.log('页面加载完成');
   // webSocketStore.setWsUrl(apiURL);
   webSocketStore.setCheckTask();
+  setTimeout(() => {
+    Listening();
+  }, 500);
 });
 // 监听页面刷新
 onUnmounted(() => {
