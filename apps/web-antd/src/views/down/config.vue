@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { donedataType } from './utils/types';
+import type { configdataListType } from './utils/types';
 
 import { onMounted, ref } from 'vue';
 
@@ -31,7 +31,7 @@ const [Form, formApi] = useVbenForm({
       componentProps: {
         placeholder: '请输入express使用端口号',
       },
-      help: 'express使用的端口号,只能是数字',
+      help: '服务端口号,只能是数字,慎重修改！！若修改后无法访问，请检查config.json和_app.config.js，docker检查映射端口',
       fieldName: 'port',
       // 界面显示的label
       label: 'API端口号',
@@ -59,7 +59,7 @@ const [Form, formApi] = useVbenForm({
       componentProps: {
         placeholder: '请输入文件保存目录',
       },
-      help: '文件保存目录绝对路径',
+      help: '文件保存目录绝对路径，默认值：/app/download',
       fieldName: 'saveFile',
       label: '保存目录',
     },
@@ -68,7 +68,7 @@ const [Form, formApi] = useVbenForm({
       componentProps: {
         placeholder: '请输入缓存目录',
       },
-      help: '下载缓存目录绝对路径',
+      help: '下载缓存目录绝对路径，默认值：/app/download/temp',
       fieldName: 'tempDir',
       label: '缓存目录',
     },
@@ -95,9 +95,18 @@ const [Form, formApi] = useVbenForm({
       componentProps: {
         placeholder: '请输入ffmpeg执行绝对路径',
       },
-      help: 'ffmpeg执行路径,如果设置了环境变量,可留空',
+      help: 'ffmpeg执行路径,如果设置了环境变量,可留空，默认值：/app/plugin/ffmpeg/ffmpeg',
       fieldName: 'ffmpegPath',
       label: 'ffmpeg',
+    },
+    {
+      component: 'Input',
+      componentProps: {
+        placeholder: '请输入N_m3u8DL-RE执行绝对路径',
+      },
+      help: 'N_m3u8DL-RE执行绝对路径,如果设置了环境变量,可留空，默认值：/app/plugin/N_m3u8DL-RE/N_m3u8DL-RE',
+      fieldName: 'Nm3u8DLRE',
+      label: 'Nm3u8DLRE',
     },
     {
       component: 'Switch',
@@ -123,7 +132,7 @@ const [Form, formApi] = useVbenForm({
   wrapperClass: 'grid-cols-1',
 });
 async function loadData() {
-  const data = (await getConfigApi()) as donedataType;
+  const data = (await getConfigApi()) as configdataListType;
 
   formApi.setFieldValue('port', data.port); // 设置默认数据
   formApi.setFieldValue('apiToken', data.apiToken); // 设置默认数据
@@ -135,6 +144,7 @@ async function loadData() {
   formApi.setFieldValue('tempDir', data.tempDir); // 设置默认数据
   formApi.setFieldValue('threadCount', data.threadCount); // 设置默认数据
   formApi.setFieldValue('threadCounts', data.threadCounts); // 设置默认数据
+  formApi.setFieldValue('Nm3u8DLRE', data.Nm3u8DLRE); // 设置默认数据
 }
 onMounted(() => {
   loadData();

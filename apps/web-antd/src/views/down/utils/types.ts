@@ -20,6 +20,7 @@ type listdataType = {
 type donedataListType = {
   downurl?: string;
   id?: string;
+  size?: string;
   time?: number;
   title?: string;
 };
@@ -28,5 +29,29 @@ type donedataType = {
   data?: donedataListType;
   message?: string;
 };
+type configdataListType = {
+  apiToken?: number | string;
+  ffmpegPath?: string;
+  Nm3u8DLRE?: string;
+  port?: number;
+  retrycount?: number;
+  saveFile?: string;
+  setbinaryMeMrges?: boolean;
+  setdecryptions?: boolean;
+  tempDir?: string;
+  threadCount?: number;
+  threadCounts?: number;
+};
+type configdataType = {
+  code: number;
+  data?: configdataListType;
+  message?: string;
+};
 
-export type { donedataListType, donedataType, listdataType, listinfoType };
+export type {
+  configdataType,
+  donedataListType,
+  donedataType,
+  listdataType,
+  listinfoType,
+};
