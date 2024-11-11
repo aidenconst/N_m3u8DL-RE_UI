@@ -5,9 +5,12 @@ type Result = {
   data?: Array<any>;
   message: string;
 };
+type dataType = {
+  type?: boolean;
+};
 type addResult = {
   code?: number;
-  data?: Array<any>;
+  data?: Array<any> | dataType;
   msg: string;
 };
 type addType = {
@@ -31,6 +34,10 @@ type editType = {
   threadCount?: number;
   threadCounts?: number;
   token?: string;
+};
+type delType = {
+  id?: number | string;
+  key?: string;
 };
 /**
  * 下载成功数据,无参数
@@ -62,8 +69,13 @@ async function getConfigApi() {
 async function editConfigApi(data?: editType) {
   return requestClient.post<Result>('/editconfig', data);
 }
+/** 删除记录 */
+async function delJsonItemApi(data?: delType) {
+  return requestClient.post<Result>('/delJsonItem', data);
+}
 export {
   addDownApi,
+  delJsonItemApi,
   editConfigApi,
   getConfigApi,
   getDownDoneApi,

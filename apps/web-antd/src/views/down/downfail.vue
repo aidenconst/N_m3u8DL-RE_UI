@@ -1,20 +1,21 @@
 <script lang="ts" setup>
 import type { donedataListType } from './utils/types';
 
-import { onMounted, ref } from 'vue';
+import { h, onMounted, ref } from 'vue';
 
 import { Page } from '@vben/common-ui';
 
 import {
+  DeleteOutlined,
   FieldTimeOutlined,
   LinkOutlined,
   QuestionCircleOutlined,
 } from '@ant-design/icons-vue';
 import { Button, Card, List, ListItem, Tag, Tooltip } from 'ant-design-vue';
 
-import { getDownFailApi } from '#/api';
+import { delJsonItemApi, getDownFailApi } from '#/api';
 
-const data: donedataListType[] = ref([]);
+const listdata: donedataListType[] = ref([]);
 function timestampToDate(timestamp) {
   const date = new Date(timestamp);
   const year = date.getFullYear();
@@ -29,7 +30,16 @@ function timestampToDate(timestamp) {
 async function loadData() {
   const res = await getDownFailApi();
   if (res) {
-    data.value = res;
+    listdata.value = res;
+  }
+}
+async function delItem(id: string) {
+  const data = { id, key: 'fail' };
+  const res = await delJsonItemApi(data);
+  if (res.type) {
+    const filter = listdata.value.find((item) => item.id === id);
+    const index = listdata.value.indexOf(filter);
+    index !== -1 && listdata.value.splice(index, 1);
   }
 }
 onMounted(() => {
@@ -40,8 +50,8 @@ onMounted(() => {
   <Page>
     <Card>
       <List
-        :data-source="data"
-        :pagination="data.length > 0 ? true : false"
+        :data-source="listdata"
+        :pagination="listdata.length > 0 ? true : false"
         bordered
       >
         <template #renderItem="{ item }">
@@ -68,16 +78,21 @@ onMounted(() => {
               </Tooltip>
               <Tooltip :title="item.downurl" placement="left">
                 <Button
+                  :icon="h(LinkOutlined)"
                   color="success"
                   shape="circle"
                   size="small"
                   type="primary"
-                >
-                  <template #icon>
-                    <LinkOutlined />
-                  </template>
-                </Button>
+                />
               </Tooltip>
+              <Button
+                :icon="h(DeleteOutlined)"
+                color="success"
+                shape="circle"
+                size="small"
+                type="primary"
+                @click="delItem(item.id)"
+              />
             </template>
           </ListItem>
         </template>
