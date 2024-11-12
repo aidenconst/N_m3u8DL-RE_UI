@@ -26,7 +26,7 @@ const [Form, formApi] = useVbenForm({
   schema: [
     {
       // 组件需要在 #/adapter.ts内注册，并加上类型
-      component: 'Input',
+      component: 'InputNumber',
       // 对应组件的参数
       componentProps: {
         placeholder: '请输入express使用端口号',
@@ -46,13 +46,13 @@ const [Form, formApi] = useVbenForm({
       label: 'token',
     },
     {
-      component: 'Input',
+      component: 'InputNumber',
       componentProps: {
         placeholder: '请输入并发下载量',
       },
       help: '并发下载任务数量',
       fieldName: 'threadCounts',
-      label: '并发下载量',
+      label: '下载任务数',
     },
     {
       component: 'Input',
@@ -73,16 +73,16 @@ const [Form, formApi] = useVbenForm({
       label: '缓存目录',
     },
     {
-      component: 'Input',
+      component: 'InputNumber',
       componentProps: {
         placeholder: '请输入N_m3u8DL-RE并发下载线程数',
       },
       help: 'N_m3u8DL-RE并发下载线程数',
       fieldName: 'threadCount',
-      label: '下载线程',
+      label: '单任务线程',
     },
     {
-      component: 'Input',
+      component: 'InputNumber',
       componentProps: {
         placeholder: '请输入下载错误重试次数',
       },
@@ -111,7 +111,7 @@ const [Form, formApi] = useVbenForm({
     {
       component: 'Switch',
       defaultValue: true,
-      fieldName: 'setbinaryMeMrges',
+      fieldName: 'binaryMeMrge',
       help: 'N_m3u8DL-RE-是否开启二进制合并',
       componentProps: {
         class: 'w-auto',
@@ -121,7 +121,7 @@ const [Form, formApi] = useVbenForm({
     {
       component: 'Switch',
       defaultValue: true,
-      fieldName: 'setdecryptions',
+      fieldName: 'mp4RealTimeDecryption',
       help: 'N_m3u8DL-RE-是否开启实时解密分片',
       componentProps: {
         class: 'w-auto',
@@ -134,17 +134,17 @@ const [Form, formApi] = useVbenForm({
 async function loadData() {
   const data = (await getConfigApi()) as configdataListType;
 
-  formApi.setFieldValue('port', data.port); // 设置默认数据
-  formApi.setFieldValue('apiToken', data.apiToken); // 设置默认数据
-  formApi.setFieldValue('binaryMeMrge', data.binaryMeMrge); // 设置默认数据
-  formApi.setFieldValue('ffmpegPath', data.ffmpegPath); // 设置默认数据
-  formApi.setFieldValue('mp4RealTimeDecryption', data.mp4RealTimeDecryption); // 设置默认数据
-  formApi.setFieldValue('retrycount', data.retrycount); // 设置默认数据
-  formApi.setFieldValue('saveFile', data.saveFile); // 设置默认数据
-  formApi.setFieldValue('tempDir', data.tempDir); // 设置默认数据
-  formApi.setFieldValue('threadCount', data.threadCount); // 设置默认数据
-  formApi.setFieldValue('threadCounts', data.threadCounts); // 设置默认数据
-  formApi.setFieldValue('Nm3u8DLRE', data.Nm3u8DLRE); // 设置默认数据
+  formApi.setFieldValue('port', data.port); // 服务端口
+  formApi.setFieldValue('apiToken', data.apiToken); // 连接验证token
+  formApi.setFieldValue('binaryMeMrge', data.binaryMeMrge); // 二进制合并
+  formApi.setFieldValue('ffmpegPath', data.ffmpegPath); // ffmpeg路径
+  formApi.setFieldValue('mp4RealTimeDecryption', data.mp4RealTimeDecryption); // 分片实时解密
+  formApi.setFieldValue('retrycount', data.retrycount); // 重试次数
+  formApi.setFieldValue('saveFile', data.saveFile); // 保存目录
+  formApi.setFieldValue('tempDir', data.tempDir); // 缓存目录
+  formApi.setFieldValue('threadCount', data.threadCount); // 并发下载任务数
+  formApi.setFieldValue('threadCounts', data.threadCounts); // 单任务并发线程数
+  formApi.setFieldValue('Nm3u8DLRE', data.Nm3u8DLRE); // N_m3u8DL_RE路径
 }
 onMounted(() => {
   loadData();

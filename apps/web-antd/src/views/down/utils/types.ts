@@ -31,13 +31,13 @@ type donedataType = {
 };
 type configdataListType = {
   apiToken?: number | string;
+  binaryMeMrge?: boolean;
   ffmpegPath?: string;
+  mp4RealTimeDecryption?: boolean;
   Nm3u8DLRE?: string;
   port?: number;
   retrycount?: number;
   saveFile?: string;
-  setbinaryMeMrges?: boolean;
-  setdecryptions?: boolean;
   tempDir?: string;
   threadCount?: number;
   threadCounts?: number;
