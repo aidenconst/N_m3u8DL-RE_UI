@@ -83,10 +83,10 @@ export const useAuthStore = defineStore('auth', () => {
   async function logout(redirect: boolean = true) {
     try {
       await logoutApi();
+      webSocketStore.closeWebSocket(); // 断开ws连接, 清除定时器
     } catch {
       // 不做任何处理
     }
-    webSocketStore.closeWebSocket(); // 断开ws连接, 清除定时器
 
     resetAllStores();
     accessStore.setLoginExpired(false);

@@ -48,7 +48,7 @@ function createRequestClient(baseURL: string) {
    */
   async function doRefreshToken() {
     const accessStore = useAccessStore();
-    const resp = await refreshTokenApi(accessStore.accessToken);
+    const resp = await refreshTokenApi();
     const newToken = resp.data;
     accessStore.setAccessToken(newToken);
     return newToken;
@@ -72,9 +72,7 @@ function createRequestClient(baseURL: string) {
   client.addResponseInterceptor<HttpResponse>({
     fulfilled: (response) => {
       const { data: responseData, status } = response;
-
       const { code, data } = responseData;
-
       if (status >= 200 && status < 400 && code === 0) {
         return data;
       }
